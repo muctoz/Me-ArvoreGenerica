@@ -1,6 +1,8 @@
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Queue;
 
 public class Tree {
@@ -126,4 +128,93 @@ public class Tree {
             getSubtree(child, subtree);
         }
     }
+
+    public Node getRoot() {
+        return root;
+    }
+    public void convertToBinarySearchTree() {
+        List<Node> nodes = new ArrayList<>();
+        traverseInOrder(getRoot(), nodes);
+        root = buildBinarySearchTree(nodes, 0, nodes.size() - 1);
+    }
+    
+    private void traverseInOrder(Node node, List<Node> nodes) {
+        if (node != null) {
+            traverseInOrder(node.getLeft(), nodes);
+            nodes.add(node);
+            traverseInOrder(node.getRight(), nodes);
+        }
+    }
+    
+    private Node buildBinarySearchTree(List<Node> nodes, int start, int end) {
+        if (start > end) {
+            return null;
+        }
+        int mid = (start + end) / 2;
+        Node node = nodes.get(mid);
+        node.setLeft(buildBinarySearchTree(nodes, start, mid - 1));
+        node.setRight(buildBinarySearchTree(nodes, mid + 1, end));
+        return node;
+    }
+    public void printNodeDepths() {
+        Map<Node, Integer> nodeDepths = new HashMap<>();
+        int maxDepth = getNodeDepths(root, 0, nodeDepths);
+        for (Node node : nodeDepths.keySet()) {
+            int depth = nodeDepths.get(node);
+            System.out.println("Node " + node.getValue() + " has depth " + depth);
+        }
+        System.out.println("The tree has depth " + maxDepth);
+    }
+    
+    private int getNodeDepths(Node node, int depth, Map<Node, Integer> nodeDepths) {
+        if (node == null) {
+            return depth;
+        }
+        nodeDepths.put(node, depth);
+        int maxDepth = depth;
+        for (Node child : node.getChildren()) {
+            int childDepth = getNodeDepths(child, depth + 1, nodeDepths);
+            if (childDepth > maxDepth) {
+                maxDepth = childDepth;
+            }
+        }
+        return maxDepth;
+    }
+    public void preOrderTraversal(Node node) {
+        if (node != null) {
+            System.out.print(node.getValue() + " ");
+            preOrderTraversal(node.getLeft());
+            preOrderTraversal(node.getRight());
+        }
+    }
+    public void postOrderTraversal(Node node) {
+        if (node != null) {
+            postOrderTraversal(node.getLeft());
+            postOrderTraversal(node.getRight());
+            System.out.print(node.getValue() + " ");
+        }
+    }
+    public void inOrderTraversal(Node node) {
+        if (node != null) {
+            inOrderTraversal(node.getLeft());
+            System.out.print(node.getValue() + " ");
+            inOrderTraversal(node.getRight());
+        }
+    }
+    public void breadthFirstTraversal() {
+        if (root == null) {
+            return;
+        }
+        Queue<Node> queue = new LinkedList<>();
+        queue.add(root);
+        while (!queue.isEmpty()) {
+            Node node = queue.remove();
+            System.out.print(node.getValue() + " ");
+            for (Node child : node.getChildren()) {
+                queue.add(child);
+            }
+        }
+        System.out.println();
+    }
+
 }

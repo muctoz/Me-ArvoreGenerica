@@ -5,6 +5,8 @@ public class Node {
     private int value;
     private Node parent;
     private List<Node> children;
+    private Node left;
+    private Node right;
 
     public Node(int value, Node parent) {
         this.value = value;
@@ -40,4 +42,22 @@ public class Node {
     public String toString() {
         return Integer.toString(value);
     }
+
+    public Node getLeft() {
+        return left;
+    }
+    
+    public void setLeft(Node left) {
+        this.left = left;
+    }
+    
+    public Node getRight() {
+        return right;
+    }
+    
+    public void setRight(Node right) {
+        this.right = right;
+    }
+    
+
 }
